@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a001a, #000066);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .heading {
+            font-weight: bold;
+            text-transform: uppercase;
+            line-height: 1.2;
+            text-shadow: 4px 4px 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .heading-small {
+            font-size: 32px;
+            opacity: 0.8;
+        }
+
+        .heading-large {
+            font-size: 70px;
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            background: rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 0, 0.4) 10%, rgba(255, 165, 0, 0.2) 50%, transparent 70%);
+            transition: all 0.5s ease;
+        }
+
+        .btn:hover::before {
+            top: 0;
+            left: 0;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 0px 15px rgba(255, 223, 0, 0.8);
+        }
+
+        .btn-teacher {
+            background: linear-gradient(135deg, #ffcc00, #ff9900);
+        }
+
+        .btn-student {
+            background: linear-gradient(135deg, #ff9900, #ffcc00);
+        }
+
+        
+        .cursor-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(173, 216, 230, 0.5), rgba(255, 0, 0, 0.3));
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: blur(30px);
+            transition: transform 0.1s linear, opacity 0.2s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-effect"></div>
+
+    <div class="container">
+        <div class="heading">
+            <div class="heading-small">Welcome to</div>
+            <div class="heading-large">Attendance Dashboard</div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-teacher" onclick="location.href='login.html'">For Teachers</button>
+            <button class="btn btn-student" onclick="location.href='login.html'">For Students</button>
+        </div>
+    </div>
+
+    <script>
+        
+        const cursor = document.querySelector('.cursor-effect');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.top = `${e.clientY}px`;
+            cursor.style.left = `${e.clientX}px`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+    </script>
+
+</body>
+</html>

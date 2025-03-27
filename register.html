@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd); 
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 350px;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+        }
+
+        .btn-register:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Register</h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <select id="role">
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+        </select>
+        <button class="btn-register" onclick="registerUser()">Register</button>
+    </div>
+
+    <script>
+        function registerUser() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const role = document.getElementById("role").value;
+
+            fetch("http://localhost:5000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password, role })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (!data.error) {
+                    window.location.href = "login.html"; 
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        }
+    </script>
+
+</body>
+</html>

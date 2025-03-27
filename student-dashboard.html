@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd);
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 350px;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-attendance {
+            background: linear-gradient(135deg, #48cae4, #0077b6);
+            color: white;
+        }
+
+        .btn-attendance:hover {
+            background: linear-gradient(135deg, #0096c7, #023e8a);
+            transform: scale(1.05);
+        }
+
+        .btn-leave {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+        }
+
+        .btn-leave:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Welcome, Student!</h2>
+        <p>Choose an option:</p>
+        <button class="btn-attendance" onclick="location.href='mark-attendance.html'">Mark Attendance</button>
+        <button class="btn-leave" onclick="location.href='leave-request.html'">Apply for Duty Leave</button>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Panel - Approve Duty Leave</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 400px;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        #leave-requests {
+            margin-top: 20px;
+        }
+
+        .request-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+
+        p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #48cae4, #0077b6);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #0096c7, #023e8a);
+            transform: scale(1.05);
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: linear-gradient(135deg, #ff6666, #bb0000);
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <h2>Pending Duty Leave Requests</h2>
+    <div class="container">
+        <div id="leave-requests">Loading...</div>
+    </div>
+    <div id="leave-requests">Loading...</div>
+
+    <script>
+        function fetchLeaveRequests() {
+            fetch("http://localhost:5000/get-leave-requests")
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById("leave-requests");
+                    container.innerHTML = "";
+
+                    data.forEach(leave => {
+                        const div = document.createElement("div");
+                        div.innerHTML = `
+                            <p><strong>Student ID:</strong> ${leave.student_id}</p>
+                            <p><strong>Class ID:</strong> ${leave.class_id}</p>
+                            <p><strong>Date:</strong> ${leave.leave_date}</p>
+                            <p><strong>Reason:</strong> ${leave.reason}</p>
+                            <p><strong>ID Card:</strong></p>
+                            <img src="http://localhost:5000${leave.id_card_image}" width="200">
+                            <br>
+                            <button onclick="approveLeave(${leave.id}, 'Approved')">Approve</button>
+                            <button onclick="approveLeave(${leave.id}, 'Rejected')">Reject</button>
+                            <hr>
+                        `;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+        function approveLeave(leave_id, status) {
+            fetch("http://localhost:5000/approve-leave", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ leave_id, status })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                fetchLeaveRequests();
+            })
+            .catch(err => console.error("Error:", err));
+        }
+
+        fetchLeaveRequests();
+    </script>
+
+    
+
+</body>
+</html>

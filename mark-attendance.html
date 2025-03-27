@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-mark {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+        }
+
+        .btn-mark:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+
+    </style>
+    
+    
+</head>
+<body>
+
+    <div class="container">
+        <h2>Mark Attendance</h2>
+        <input type="text" id="student_id" placeholder="Enter Student ID">
+        <input type="text" id="roll_no" placeholder="Enter Roll No">
+        <input type="text" id="class_id" placeholder="Enter Class ID">
+        
+
+
+
+        <button class="btn-mark" onclick="markAttendance()">Mark Attendance</button>
+
+
+    </div>
+
+
+    <script>
+      
+        function markAttendance() {
+            let student_id = document.getElementById("student_id").value.trim();
+            let roll_no = document.getElementById("roll_no").value.trim();
+            let class_id = document.getElementById("class_id").value.trim();
+
+            if (!student_id || !roll_no || !class_id) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            if (!navigator.geolocation) {
+                alert("Geolocation not supported by your browser.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(position => {
+                fetch('http://localhost:5000/mark-attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        student_id: student_id,
+                        roll_no: roll_no,
+                        class_id: class_id,
+                        student_lat: position.coords.latitude,
+                        student_lon: position.coords.longitude
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Server Response:", data);
+                    alert(data.message || data.error);
+                })
+                .catch(error => {
+                    console.error("Fetch Error:", error);
+                    alert("Error marking attendance. Check console.");
+                });
+            }, error => {
+                console.error("Geolocation Error:", error);
+                alert("Error getting location: " + error.message);
+            });
+        }
+    
+    </script>
+
+</body>
+</html>

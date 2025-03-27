@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Duty Leave</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd); /* Light Purple Gradient */
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15); /* Glass Effect */
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 350px;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Submit Request Button (Golden Theme) */
+        .btn-submit {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Request Duty Leave</h2>
+        <input type="text" id="student_id" placeholder="Enter Student ID">
+        <input type="text" id="class_id" placeholder="Enter Class ID">
+        <input type="date" id="leave_date">
+        <textarea id="reason" placeholder="Enter Reason"></textarea>
+        <input type="file" id="id_card_image" accept="image/*">
+        <button class="btn-submit" onclick="requestLeave()">Submit Request</button>
+        
+    </div>
+
+    
+    
+    <script>
+        function requestLeave() {
+            const student_id = document.getElementById("student_id").value;
+            const class_id = document.getElementById("class_id").value;
+            const leave_date = document.getElementById("leave_date").value;
+            const reason = document.getElementById("reason").value;
+            const fileInput = document.getElementById("id_card_image").files[0];
+    
+            if (!fileInput) {
+                alert("Please upload your ID card image!");
+                return;
+            }
+    
+            let formData = new FormData();
+            formData.append("student_id", student_id);
+            formData.append("class_id", class_id);
+            formData.append("leave_date", leave_date);
+            formData.append("reason", reason);
+            formData.append("id_card_image", fileInput);
+    
+            fetch("http://localhost:5000/request-leave", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => alert(data.message))
+            .catch(err => console.error("Error:", err));
+        }
+    </script>
+    
+
+</body>
+</html>

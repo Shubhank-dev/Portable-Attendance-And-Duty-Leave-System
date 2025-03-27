@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Class</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+            outline: none;
+            text-align: center;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+        }
+
+        .btn-action:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+
+        img {
+            margin-top: 10px;
+            border-radius: 10px;
+            background: white;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create Class</h2>
+        <input type="text" id="class_id" placeholder="Enter Class ID">
+        <input type="text" id="teacher_id" placeholder="Enter Teacher ID">
+        <input type="text" id="class_name" placeholder="Enter Class Name">
+        <!-- <img id="qrCode" src="" alt="QR Code will appear here" width="150">
+        <button class="btn-action" onclick="generateQRCode()">Generate New QR Code</button> -->
+        <button class="btn-action" onclick="createClass()">Create Class</button>
+    </div>
+
+    <script>
+        // function generateQRCode() {
+        //     const class_id = document.getElementById("class_id").value;
+
+        //     if (!class_id) {
+        //         alert("Please enter a class ID first.");
+        //         return;
+        //     }
+
+        //     fetch("http://localhost:5000/generate-qr?class_id=" + class_id)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             document.getElementById("qrCode").src = data.qrImage;
+        //         })
+        //         .catch(err => {
+        //             alert("Failed to load QR Code!");
+        //         });
+        // }
+
+
+        function createClass() {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    const class_id = document.getElementById("class_id").value;
+                    const teacher_id = document.getElementById("teacher_id").value;
+                    const class_name = document.getElementById("class_name").value;
+
+                    fetch("http://localhost:5000/create-class", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            class_id: class_id,
+                            teacher_id: teacher_id,
+                            class_name: class_name,
+                            latitude: latitude,
+                            longitude: longitude
+                        }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Server Response:", data);
+                        if (data.error) {
+                            alert("Error: " + data.error);
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Fetch Error:", error);
+                        alert("Error in sending request.");
+                    });
+                }
+            );
+        }
+    </script>
+</body>
+</html>

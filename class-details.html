@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Details</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            margin-top: 15px;
+            color: #ffcc00;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+            transition: all 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        function fetchClassDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const class_id = urlParams.get('class_id');
+
+            document.getElementById("class-title").innerText = `Class ID: ${class_id}`;
+
+            fetch(`http://localhost:5000/class-details/${class_id}`)
+                .then(res => res.json())
+                .then(data => {
+                    let attendanceDiv = document.getElementById("attendance-list");
+                    let leavesDiv = document.getElementById("leave-list");
+                    
+                    attendanceDiv.innerHTML = "<h3>Attendance:</h3>";
+                    data.attendance.forEach(student => {
+                        attendanceDiv.innerHTML += `<p>Student ID: ${student.student_id}</p>`;
+                    });
+
+                    leavesDiv.innerHTML = "<h3>Approved Leaves:</h3>";
+                    data.approved_leaves.forEach(leave => {
+                        leavesDiv.innerHTML += `<p>Student ID: ${leave.student_id} - Date: ${leave.leave_date}</p>`;
+                    });
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+        window.onload = fetchClassDetails;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2 id="class-title"></h2>
+        <div id="attendance-list"></div>
+        <div id="leave-list"></div>
+        <button onclick="window.history.back()">Back</button>
+    </div>
+</body>
+</html>

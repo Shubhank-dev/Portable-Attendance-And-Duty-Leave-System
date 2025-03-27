@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Classes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a189a, #9d4edd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+            width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #ffdd57;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .class-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            text-align: left;
+        }
+
+        .class-item button {
+            background: linear-gradient(135deg, #ffcc00, #ff8800);
+            color: #1a002b;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .class-item button:hover {
+            background: linear-gradient(135deg, #ffaa00, #ff6600);
+            transform: scale(1.05);
+        }
+    </style>
+    <script>
+        function fetchClasses() {
+            const teacher_id = "T123"; // ✅ Replace dynamically if needed
+            fetch(`http://localhost:5000/get-classes/${teacher_id}`)
+                .then(res => res.json())
+                .then(data => {
+                    let container = document.getElementById("class-list");
+                    container.innerHTML = "";
+                    data.forEach(cls => {
+                        let div = document.createElement("div");
+                        div.className = "class-item";
+                        div.innerHTML = `<p>${cls.class_name} (ID: ${cls.class_id}) 
+                        <button onclick="viewClassDetails('${cls.class_id}')">View</button></p>`;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(err => console.error("Error:", err));
+        }
+
+        function viewClassDetails(class_id) {
+            window.location.href = `class-details.html?class_id=${class_id}`;
+        }
+
+        window.onload = fetchClasses;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>My Classes</h2>
+        <div id="class-list">Loading...</div>
+    </div>
+</body>
+</html>
